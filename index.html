@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#281c17" />
+<meta name="description" content="Presentasi Sesi 4 Corporate Excel Training — Master Data Integration VLOOKUP & XLOOKUP" />
+<title>Sesi 4 — Master Data Integration | Post Management Data</title>
+<style>
+  :root {
+    --espresso: #281c17; --coffee: #493126; --brown: #6a4734; --caramel: #c58d55;
+    --cream: #f8f2e9; --paper: #fffdf9; --ink: #30241e; --muted: #82756b;
+    --line: #e7d9c9; --sage: #e6eee5; --blue: #e7edf2; --rose: #f5e5de;
+    --goldwash: #f5ead9; --shadow: 0 22px 70px rgba(22, 14, 10, .22);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; background: var(--espresso); color: var(--ink); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  body { min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
+  button { font: inherit; }
+  .topbar { height: 58px; padding: 0 22px; color: #f9eee2; display: flex; align-items: center; justify-content: space-between; gap: 14px; border-bottom: 1px solid rgba(255,255,255,.12); background: rgba(26,18,14,.78); }
+  .brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
+  .brand-mark { width: 33px; height: 33px; flex: 0 0 auto; border: 1px solid rgba(235,190,137,.8); border-radius: 10px; display: grid; place-items: center; color: #e9b982; font-weight: 800; font-size: 13px; letter-spacing: -.08em; }
+  .brand-copy { min-width: 0; }
+  .brand-title { font-size: 12px; letter-spacing: .16em; font-weight: 800; white-space: nowrap; }
+  .brand-sub { margin-top: 2px; font-size: 10px; color: #c5b4a8; letter-spacing: .08em; text-transform: uppercase; }
+  .top-actions { display: flex; align-items: center; gap: 8px; }
+  .quiet-btn { border: 1px solid rgba(255,255,255,.19); background: transparent; color: #f9eee2; border-radius: 9px; padding: 8px 11px; font-size: 11px; cursor: pointer; transition: .2s; }
+  .quiet-btn:hover, .quiet-btn:focus-visible { background: rgba(255,255,255,.1); outline: none; }
+  main { flex: 1; display: grid; place-items: center; padding: 20px 18px; position: relative; }
+  .presentation { width: min(100%, 1120px); aspect-ratio: 16 / 9; max-height: calc(100vh - 142px); min-height: 390px; position: relative; background: var(--cream); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow); }
+  .slide { position: absolute; inset: 0; padding: clamp(28px, 4.3vw, 58px) clamp(28px, 5vw, 68px) 52px; overflow: auto; opacity: 0; transform: translateX(24px); pointer-events: none; transition: opacity .3s ease, transform .3s ease; background: radial-gradient(ellipse at 100% 0%, rgba(197,141,85,.09), transparent 32%), var(--cream); }
+  .slide.active { opacity: 1; transform: translateX(0); pointer-events: auto; z-index: 1; }
+  .slide.exit-left { transform: translateX(-24px); }
+  .slide-number { position: absolute; right: 27px; bottom: 20px; color: #a59484; font-size: 10px; letter-spacing: .16em; font-weight: 700; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 9px; color: var(--brown); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; font-weight: 800; margin-bottom: 13px; }
+  .eyebrow::before { content: ""; width: 24px; height: 2px; background: var(--caramel); }
+  h1, h2, h3, p { margin-top: 0; }
+  h1 { font-family: Georgia, "Times New Roman", serif; font-weight: 500; font-size: clamp(36px, 5vw, 66px); letter-spacing: -.045em; line-height: 1.02; margin-bottom: 20px; }
+  h2 { font-family: Georgia, "Times New Roman", serif; font-size: clamp(28px, 3.4vw, 42px); line-height: 1.1; letter-spacing: -.035em; font-weight: 500; margin-bottom: 14px; }
+  h3 { font-size: 15px; line-height: 1.25; margin-bottom: 8px; color: var(--coffee); }
+  p { color: #66574c; line-height: 1.55; font-size: clamp(12px, 1.15vw, 15px); }
+  .lead { max-width: 650px; font-size: clamp(15px, 1.65vw, 19px); color: #6c5b4e; line-height: 1.55; }
+  .accent { color: var(--caramel); }
+  
+  .cover { background: linear-gradient(120deg, rgba(40,28,23,.99), rgba(73,49,38,.97)); color: var(--cream); }
+  .cover::before { content: ""; position: absolute; width: 50%; aspect-ratio: 1; right: -12%; top: -25%; border-radius: 50%; border: 1px solid rgba(223,176,126,.28); box-shadow: 0 0 0 34px rgba(223,176,126,.04), 0 0 0 74px rgba(223,176,126,.035), 0 0 0 125px rgba(223,176,126,.025); }
+  .cover::after { content: ""; position: absolute; right: 12%; bottom: 15%; width: 19%; height: 29%; border: 1px solid rgba(223,176,126,.3); border-radius: 48% 48% 8px 8px; transform: rotate(14deg); }
+  .cover .eyebrow { color: #e9bc8e; }
+  .cover h1 { max-width: 700px; position: relative; z-index: 1; }
+  .cover .lead { color: #d8c8ba; max-width: 560px; position: relative; z-index: 1; }
+  .cover-meta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 26px; position: relative; z-index: 1; }
+  .pill { padding: 9px 13px; border: 1px solid rgba(255,255,255,.18); border-radius: 100px; color: #e8d9ca; font-size: 11px; letter-spacing: .02em; }
+  .cover-footer { position: absolute; left: clamp(28px, 5vw, 68px); bottom: 27px; color: #bba697; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; }
+
+  .layout-two { display: grid; grid-template-columns: 1.08fr .92fr; gap: clamp(20px, 4vw, 46px); align-items: center; }
+  .card-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 13px; margin-top: 25px; }
+  .card { background: rgba(255,253,249,.88); border: 1px solid var(--line); border-radius: 13px; padding: 17px 17px 15px; min-width: 0; }
+  .card p { font-size: 12px; margin-bottom: 0; }
+  .icon-box { width: 35px; height: 35px; border-radius: 10px; background: var(--goldwash); color: var(--brown); display: grid; place-items: center; font-size: 15px; font-weight: 800; margin-bottom: 12px; }
+  .side-note { background: var(--coffee); color: var(--cream); border-radius: 14px; padding: 23px; position: relative; overflow: hidden; }
+  .side-note h3 { color: #f3cfaa; }
+  .side-note p { color: #e1d1c4; font-size: 12px; }
+  .bottom-callout { display: flex; align-items: center; gap: 13px; padding: 15px 18px; background: var(--goldwash); border-left: 3px solid var(--caramel); border-radius: 8px; color: var(--coffee); font-size: 12px; line-height: 1.5; }
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 25px; }
+  .compare-panel { border-radius: 14px; padding: 21px; min-height: 228px; }
+  .raw { background: var(--rose); }
+  .master { background: var(--sage); }
+  .panel-tag { display: inline-block; font-size: 9px; text-transform: uppercase; letter-spacing: .15em; font-weight: 800; border-radius: 100px; padding: 6px 9px; background: rgba(255,255,255,.66); margin-bottom: 13px; }
+  .mini-table { width: 100%; border-collapse: collapse; background: var(--paper); border: 1px solid var(--line); overflow: hidden; border-radius: 10px; margin-top: 20px; font-size: 11px; }
+  .mini-table th { text-align: left; color: #f8f0e8; background: var(--coffee); font-size: 10px; font-weight: 700; padding: 11px 12px; }
+  .mini-table td { border-bottom: 1px solid #eee4d8; padding: 11px 12px; color: #5d4e43; }
+  .formula { font: 12px/1.7 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: #563c2b; background: #f2e6d6; border: 1px solid #e5d2bc; padding: 12px 14px; border-radius: 8px; display: inline-block; overflow-wrap: anywhere; }
+  .formula-stack { display: grid; gap: 10px; margin-top: 16px; }
+  .formula-row { display: grid; grid-template-columns: minmax(100px, .45fr) 1fr; align-items: center; gap: 12px; background: var(--paper); border: 1px solid var(--line); padding: 12px 14px; border-radius: 9px; }
+  .formula-row strong { font-size: 11px; color: var(--coffee); }
+  .formula-row code { font-size: 11px; color: #765337; white-space: normal; overflow-wrap: anywhere; }
+  
+  .btn-link { display:inline-flex; align-items:center; gap:8px; padding:12px 20px; background:var(--coffee); color:white !important; text-decoration:none; border-radius:8px; font-weight:600; font-size:13px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition:transform 0.2s, background 0.2s; }
+  .btn-link:hover { transform:translateY(-2px); background:var(--brown); }
+  
+  .note-pop { position: fixed; inset: 0; z-index: 10; display:none; background:rgba(11,8,6,.52); padding:18px; align-items:center; justify-content:center; }
+  .note-pop.open { display:flex; }
+  .note-card { width:min(620px,100%); max-height:80vh; overflow:auto; background:var(--paper); border-radius:16px; padding:25px; box-shadow:var(--shadow); }
+  .note-head { display:flex; align-items:center; justify-content:space-between; gap:15px; }
+  .note-head h3 { font-size:19px; font-family:Georgia,serif; }
+  
+  .controls { min-height:64px; color:#f1e2d5; padding:10px 22px; display:flex; align-items:center; justify-content:space-between; gap:14px; border-top:1px solid rgba(255,255,255,.12); background:rgba(26,18,14,.78); }
+  .progress-wrap { display:flex; align-items:center; gap:12px; flex:1; max-width:390px; }
+  .progress-track { height:3px; background:rgba(255,255,255,.18); border-radius:20px; flex:1; overflow:hidden; }
+  .progress-fill { height:100%; width:0; background:var(--caramel); transition:width .25s ease; }
+  .counter { font-size:11px; color:#cbb9aa; min-width:45px; font-variant-numeric:tabular-nums; }
+  .navs { display:flex; gap:8px; align-items:center; }
+  .nav-btn { background:var(--caramel); color:#241812; border:0; border-radius:10px; width:40px; height:38px; display:grid; place-items:center; cursor:pointer; font-size:18px; font-weight:800; transition:transform .15s, opacity .15s; }
+  .nav-btn:hover { transform:translateY(-1px); }
+  .nav-btn:disabled { opacity:.35; cursor:not-allowed; transform:none; }
+  .keyboard-hint { font-size:10px; color:#ad9b8c; }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand" aria-label="Post Management Data">
+    <div class="brand-mark">PMD</div>
+    <div class="brand-copy">
+      <div class="brand-title">POST MANAGEMENT DATA</div>
+      <div class="brand-sub">Corporate Excel Training</div>
+    </div>
+  </div>
+  <div class="top-actions">
+    <button class="quiet-btn" id="outlineBtn" type="button" title="Lihat ringkasan slide">Daftar materi</button>
+    <button class="quiet-btn" id="notesBtn" type="button" title="Buka catatan tutor">Catatan tutor</button>
+    <button class="quiet-btn" id="fullscreenBtn" type="button" title="Mode layar penuh">⛶ Layar penuh</button>
+  </div>
+</header>
+
+<main>
+<div class="presentation" id="presentation" aria-live="polite">
+
+<!-- ============ 01 · COVER ============ -->
+<section class="slide cover active" data-title="Pembuka" data-note="Gunakan naskah pembukaan: Selamat pagi/siang semuanya. Pada tiga sesi sebelumnya kita sudah belajar menyiapkan data, menggunakan Family IF, dan menghitung data dengan SUM, COUNT, AVERAGE, serta fungsi berdasarkan kriteria seperti SUMIF dan COUNTIF. Hari ini kita lanjut ke tahap berikutnya: bagaimana mengambil informasi dari tabel master secara otomatis.">
+  <div class="eyebrow">SESI 04 · MASTER DATA INTEGRATION</div>
+  <h1>VLOOKUP &amp;<br><span class="accent">XLOOKUP</span></h1>
+  <p class="lead">Menghubungkan data permintaan dengan Master Data secara otomatis. Mencari kode, kategori, satuan, dan harga hanya dengan satu ketukan.</p>
+  <div class="cover-meta">
+    <span class="pill">PT Sinar Jernih Sarana</span>
+    <span class="pill">Corporate Excel Training</span>
+    <span class="pill">60 menit</span>
+  </div>
+  <div class="cover-footer">Post Management Data · Learn it, structure it, automate it</div>
+  <div class="slide-number">01 / 14</div>
+</section>
+
+<!-- ============ 02 · TUJUAN & ALUR ============ -->
+<section class="slide" data-title="Tujuan &amp; Alur" data-note="Jelaskan tujuan sesi dan alur waktu. Sesi ini berfokus pada Master Item, karena data ini akan digunakan kembali pada Sesi 5-8.">
+  <div class="eyebrow">01 · LEARNING OUTCOMES</div>
+  <h2>Tujuan Sesi &amp; Alur Waktu</h2>
+  <p class="lead">Peserta mampu mencari data berdasarkan Nama Item Standar, mengambil atribut dari Master Item, dan memberi status.</p>
+  
+  <div class="layout-two" style="margin-top:20px">
+    <div class="card-grid" style="margin-top:0">
+      <div class="card"><div class="icon-box">1</div><h3>Memahami Lookup</h3><p>Mengerti konsep Lookup Value, Lookup Key, dan Return Value.</p></div>
+      <div class="card"><div class="icon-box">2</div><h3>Menguasai XLOOKUP</h3><p>Mencari Kode Item berdasarkan Nama Item Standar.</p></div>
+      <div class="card"><div class="icon-box">3</div><h3>Menguasai VLOOKUP</h3><p>Mengambil Kategori, Satuan, dan Harga dari Kode Item.</p></div>
+      <div class="card"><div class="icon-box">4</div><h3>Status Lookup</h3><p>Menggunakan IFS untuk mengecek apakah data ditemukan atau tidak.</p></div>
+    </div>
+    <div class="side-note">
+      <h3>Alur Waktu (60 Menit)</h3>
+      <p>🕒 <b>10 Menit:</b> Konsep &amp; Demo</p>
+      <p>🕒 <b>30 Menit:</b> Praktik Kelompok</p>
+      <p>🕒 <b>20 Menit:</b> Review &amp; Feedback</p>
+      <p style="margin-top:15px; font-size:10px; color:#c8b2a0">Fokus utama: Master Item. Latihan bonus opsional.</p>
+    </div>
+  </div>
+  <div class="slide-number">02 / 14</div>
+</section>
+
+<!-- ============ 03 · LINK WORKBOOK ============ -->
+<section class="slide" data-title="Workbook Peserta" data-note="Arahkan peserta untuk membuka link dan masuk ke sheet 01_LOOKUP_ITEM.">
+  <div class="eyebrow">WORKBOOK PESERTA</div>
+  <h2>Akses File Latihan</h2>
+  <p class="lead">Silakan klik tombol di bawah ini untuk membuka workbook Excel Sesi 4 di Google Sheets.</p>
+  
+  <div style="margin-top:24px; margin-bottom:24px;">
+    <a href="https://docs.google.com/spreadsheets/d/1-1LCLErs6dEzt85mFYwetUdU5JggKgwH/edit?usp=sharing&ouid=113453549576979377139&rtpof=true&sd=true" target="_blank" class="btn-link">
+      📂 Buka Workbook Excel Sesi 4
+    </a>
+  </div>
+  
+  <table class="mini-table">
+    <thead><tr><th>Sheet</th><th>Fungsi</th></tr></thead>
+    <tbody>
+      <tr><td><b>00_MULAI</b></td><td>Tujuan dan instruksi pengerjaan.</td></tr>
+      <tr><td><b>01_LOOKUP_ITEM</b></td><td>Area latihan utama; peserta mengisi kolom G-K pada baris 7-23.</td></tr>
+      <tr><td><b>02_MASTER_ITEM</b></td><td>Master utama: kode, nama standar, kategori, satuan, dan harga.</td></tr>
+      <tr><td><b>07_LOOKUP_BONUS</b></td><td>Latihan tambahan aset, teknisi, vendor, dan SLA (opsional).</td></tr>
+    </tbody>
+  </table>
+  <div class="slide-number">03 / 14</div>
+</section>
+
+<!-- ============ 04 · KONSEP LOOKUP ============ -->
+<section class="slide" data-title="Konsep Lookup" data-note="Gunakan analogi buku katalog. Master Item adalah buku daftar barang. Kita punya nama barang, Excel mencari di buku, lalu mengambil harganya.">
+  <div class="eyebrow">02 · KONSEP DASAR</div>
+  <h2>Analogi Lookup: Buku Katalog</h2>
+  <p class="lead">Bayangkan Master Item adalah buku daftar barang. Kita punya satu informasi petunjuk, Excel mencari di buku itu, lalu mengambil informasi lain di baris yang sama.</p>
+  
+  <div class="card-grid" style="margin-top:25px">
+    <div class="card" style="border-left: 4px solid var(--caramel);"><h3>Lookup</h3><p>Proses mencari suatu informasi di tabel referensi. (Mencari kode item dari nama standar).</p></div>
+    <div class="card" style="border-left: 4px solid var(--caramel);"><h3>Lookup Value</h3><p>Nilai yang kita gunakan untuk mencari. (Nama Item Standar di C7).</p></div>
+    <div class="card" style="border-left: 4px solid var(--caramel);"><h3>Lookup Key</h3><p>Kolom kunci acuan pencarian. (Nama Item Standar atau Kode Item).</p></div>
+    <div class="card" style="border-left: 4px solid var(--caramel);"><h3>Return Value</h3><p>Informasi yang ingin diambil. (Kategori, satuan, harga).</p></div>
+    <div class="card" style="border-left: 4px solid var(--caramel);"><h3>Master Data</h3><p>Daftar referensi sumber informasi. (Sheet 02_MASTER_ITEM).</p></div>
+    <div class="card" style="border-left: 4px solid var(--caramel);"><h3>Exact Match</h3><p>Pencarian harus sama persis, bukan sekadar mirip.</p></div>
+  </div>
+  <div class="slide-number">04 / 14</div>
+</section>
+
+<!-- ============ 05 · XLOOKUP VS VLOOKUP ============ -->
+<section class="slide" data-title="XLOOKUP vs VLOOKUP" data-note="Jelaskan perbedaan dasar. XLOOKUP lebih fleksibel karena kolom pencarian dan hasil bisa dipilih terpisah. VLOOKUP kaku, kolom pencarian harus paling kiri.">
+  <div class="eyebrow">03 · DUA FUNGSI UTAMA</div>
+  <h2>XLOOKUP vs VLOOKUP</h2>
+  <p class="lead">Kita akan menggunakan keduanya secara bergantian sesuai kebutuhan.</p>
+  
+  <div class="compare" style="margin-top:20px">
+    <div class="compare-panel master">
+      <span class="panel-tag">FLEKSIBEL</span>
+      <h3>XLOOKUP</h3>
+      <p style="font-size:11px">Mencari nilai di satu kolom, lalu mengembalikan informasi dari kolom lain.</p>
+      <p style="font-size:11px; margin-top:8px"><b>Dipakai untuk:</b><br>Cari Kode Item berdasarkan Nama Item Standar.</p>
+    </div>
+    <div class="compare-panel raw">
+      <span class="panel-tag">KLASIK</span>
+      <h3>VLOOKUP</h3>
+      <p style="font-size:11px">Mencari nilai pada kolom paling kiri tabel, lalu mengambil nilai dari kolom di sebelah kanan.</p>
+      <p style="font-size:11px; margin-top:8px"><b>Dipakai untuk:</b><br>Ambil Kategori, Satuan, Harga berdasarkan Kode Item.</p>
+    </div>
+  </div>
+  <div class="slide-number">05 / 14</div>
+</section>
+
+<!-- ============ 06 · DEMO XLOOKUP ============ -->
+<section class="slide" data-title="Demo XLOOKUP" data-note="Demo XLOOKUP di sheet 01_LOOKUP_ITEM, sel G7. Tunjukkan hasilnya MCH-001. Baca rumusnya pelan-pelan.">
+  <div class="eyebrow">04 · DEMO PERTAMA</div>
+  <h2>XLOOKUP: Mencari Kode Item</h2>
+  <p class="lead">Arahkan ke sheet <b>01_LOOKUP_ITEM</b>. Kolom C berisi Nama Item Standar, kolom G adalah tempat mengisi Kode Item.</p>
+  
+  <div class="formula" style="font-size:13px; padding:16px; margin:20px 0; background:#f2e6d6; color:#563c2b; border-radius:8px; overflow-x:auto;">
+    =XLOOKUP(C7; 02_MASTER_ITEM!$B$5:$B$20; 02_MASTER_ITEM!$A$5:$A$20; "PERIKSA MASTER"; 0)
+  </div>
+  
+  <table class="mini-table">
+    <thead><tr><th>Bagian Rumus</th><th>Artinya</th></tr></thead>
+    <tbody>
+      <tr><td><code>C7</code></td><td>Nilai yang ingin dicari: Nama Item Standar.</td></tr>
+      <tr><td><code>02_MASTER_ITEM!$B$5:$B$20</code></td><td>Kolom tempat Excel mencari nama item.</td></tr>
+      <tr><td><code>02_MASTER_ITEM!$A$5:$A$20</code></td><td>Kolom hasil yang ingin diambil (Kode Item).</td></tr>
+      <tr><td><code>"PERIKSA MASTER"</code></td><td>Pesan jika nama item tidak ditemukan.</td></tr>
+      <tr><td><code>0</code></td><td>Exact match: hasil harus cocok persis.</td></tr>
+    </tbody>
+  </table>
+  <div class="slide-number">06 / 14</div>
+</section>
+
+<!-- ============ 07 · DEMO VLOOKUP ============ -->
+<section class="slide" data-title="Demo VLOOKUP" data-note="Setelah kode item muncul di G, gunakan VLOOKUP untuk Kategori, Satuan, dan Harga. Sel H7 menggunakan nomor kolom 3, I7 nomor 4, J7 nomor 5.">
+  <div class="eyebrow">05 · DEMO KEDUA</div>
+  <h2>VLOOKUP: Ambil Kategori, Satuan, Harga</h2>
+  <p class="lead">Setelah kode item muncul di kolom G, gunakan kode tersebut untuk mengambil data dari sheet <b>02_MASTER_ITEM</b>.</p>
+  
+  <div class="formula-stack">
+    <div class="formula-row">
+      <strong>H7 (Kategori)</strong>
+      <code>=IFERROR(VLOOKUP(G7; 02_MASTER_ITEM!$A$5:$E$20; 3; FALSE); "PERIKSA MASTER")</code>
+    </div>
+    <div class="formula-row">
+      <strong>I7 (Satuan)</strong>
+      <code>=IFERROR(VLOOKUP(G7; 02_MASTER_ITEM!$A$5:$E$20; 4; FALSE); "PERIKSA MASTER")</code>
+    </div>
+    <div class="formula-row">
+      <strong>J7 (Harga)</strong>
+      <code>=IFERROR(VLOOKUP(G7; 02_MASTER_ITEM!$A$5:$E$20; 5; FALSE); "PERIKSA MASTER")</code>
+    </div>
+  </div>
+  
+  <div class="bottom-callout" style="margin-top:16px">
+    <strong>Penting:</strong> Angka 3, 4, dan 5 adalah nomor urut kolom di dalam rentang A:E. (A=1, B=2, C=3, D=4, E=5). FALSE artinya harus cocok persis.
+  </div>
+  <div class="slide-number">07 / 14</div>
+</section>
+
+<!-- ============ 08 · STATUS DENGAN IFS ============ -->
+<section class="slide" data-title="Status Lookup (IFS)" data-note="Gunakan IFS karena peserta sudah belajar IF di Sesi 2. Jelaskan logikanya dari atas ke bawah.">
+  <div class="eyebrow">06 · STATUS LOOKUP</div>
+  <h2>Memberi Status dengan IFS</h2>
+  <p class="lead">Setelah kolom G sampai J terisi, tentukan status hasil pencarian di kolom K.</p>
+  
+  <div class="formula" style="font-size:12px; padding:16px; margin:20px 0; background:#f2e6d6; color:#563c2b; border-radius:8px; overflow-x:auto; white-space:pre-wrap;">
+=IFS(
+  C7=""; "BELUM DIISI";
+  G7="PERIKSA MASTER"; "TIDAK DITEMUKAN";
+  OR(G7=""; H7=""; I7=""; J7=""); "PERLU REVIEW";
+  TRUE; "DITEMUKAN"
+)
+  </div>
+  
+  <table class="mini-table">
+    <thead><tr><th>Status</th><th>Makna</th></tr></thead>
+    <tbody>
+      <tr><td><code>BELUM DIISI</code></td><td>Nama item standar belum diisi.</td></tr>
+      <tr><td><code>TIDAK DITEMUKAN</code></td><td>Kode item tidak berhasil ditemukan di Master Item.</td></tr>
+      <tr><td><code>PERLU REVIEW</code></td><td>Ada kolom hasil lookup yang masih kosong.</td></tr>
+      <tr><td><code>DITEMUKAN</code></td><td>Kode, kategori, satuan, dan harga sudah terisi.</td></tr>
+    </tbody>
+  </table>
+  <div class="slide-number">08 / 14</div>
+</section>
+
+<!-- ============ 09 · PRAKTIK PESERTA ============ -->
+<section class="slide" data-title="Instruksi Praktik" data-note="Bacakan instruksi praktik. Beri waktu 30 menit. Berjalan keliling.">
+  <div class="eyebrow">07 · PRAKTIK · 30 MENIT</div>
+  <h2>Waktunya Praktik!</h2>
+  <p class="lead">Buka sheet <b>01_LOOKUP_ITEM</b>. Isi kolom berwarna kuning.</p>
+  
+  <div class="card-grid" style="margin-top:20px">
+    <div class="card">
+      <h3>Kolom G: Kode Item</h3>
+      <p>Gunakan <b>XLOOKUP</b> berdasarkan Nama Item Standar.</p>
+    </div>
+    <div class="card">
+      <h3>Kolom H, I, J</h3>
+      <p>Gunakan <b>VLOOKUP</b> berdasarkan Kode Item untuk mengambil Kategori, Satuan, dan Harga.</p>
+    </div>
+    <div class="card">
+      <h3>Kolom K: Status</h3>
+      <p>Gunakan <b>IFS</b> untuk mengecek apakah data ditemukan atau tidak.</p>
+    </div>
+    <div class="card">
+      <h3>Tips Cepat</h3>
+      <p>Gunakan <i>fill handle</i> (tarik kotak kecil di pojok kanan bawah sel) untuk menyalin rumus ke bawah.</p>
+    </div>
+  </div>
+  
+  <div class="bottom-callout" style="margin-top:16px">
+    <strong>PENTING:</strong> Jangan mengubah data di sheet 02_MASTER_ITEM. Kita hanya mengambil datanya.
+  </div>
+  <div class="slide-number">09 / 14</div>
+</section>
+
+<!-- ============ 10 · STUDI KASUS BQ-017 ============ -->
+<section class="slide" data-title="Studi Kasus BQ-017" data-note="Jelaskan mengapa baris BQ-017 (Floor Polisher) tidak ditemukan. Jangan mengarang harga. Gunakan PERIKSA MASTER dan TIDAK DITEMUKAN.">
+  <div class="eyebrow">08 · STUDI KASUS</div>
+  <h2>Baris BQ-017: "Floor Polisher"</h2>
+  <p class="lead">Coba perhatikan baris ke-17 (BQ-017). Apa yang terjadi jika nama barang tidak ada di Master Item?</p>
+  
+  <div class="compare" style="margin-top:20px">
+    <div class="compare-panel raw">
+      <span class="panel-tag">SALAH</span>
+      <h3>Mengarang Data</h3>
+      <p style="font-size:11px">Mengisi harga sendiri atau membuat kode karangan karena barang tidak ditemukan.</p>
+    </div>
+    <div class="compare-panel master">
+      <span class="panel-tag">BENAR</span>
+      <h3>PERIKSA MASTER</h3>
+      <p style="font-size:11px">Membiarkan sistem menampilkan "PERIKSA MASTER" pada Kode, dan "TIDAK DITEMUKAN" pada Status.</p>
+    </div>
+  </div>
+  <div class="bottom-callout" style="margin-top:16px">
+    <strong>Pesan Moral:</strong> Jika data tidak ada di master, artinya harus ada konfirmasi ke pihak terkait (purchasing/admin). Jangan menebak-nebak!
+  </div>
+  <div class="slide-number">10 / 14</div>
+</section>
+
+<!-- ============ 11 · REVIEW & DISKUSI ============ -->
+<section class="slide" data-title="Review &amp; Diskusi" data-note="Bacakan pertanyaan diskusi. Minta perwakilan kelompok menjawab.">
+  <div class="eyebrow">09 · REVIEW &amp; FEEDBACK</div>
+  <h2>Mari Kita Diskusikan</h2>
+  <p class="lead">Bukan hanya soal jawaban benar, tapi pemahaman dari mana data itu diambil.</p>
+  
+  <div class="formula-stack" style="margin-top:20px">
+    <div class="formula-row">
+      <strong>1. Lookup Key</strong>
+      <p style="font-size:12px">Apa bedanya menggunakan Nama Item vs Kode Item sebagai kunci pencarian?</p>
+    </div>
+    <div class="formula-row">
+      <strong>2. X vs V</strong>
+      <p style="font-size:12px">Kapan sebaiknya pakai XLOOKUP, dan kapan pakai VLOOKUP?</p>
+    </div>
+    <div class="formula-row">
+      <strong>3. Nomor Kolom</strong>
+      <p style="font-size:12px">Kenapa di VLOOKUP Kategori pakai angka 3, Satuan pakai 4, dan Harga pakai 5?</p>
+    </div>
+    <div class="formula-row">
+      <strong>4. Data Master</strong>
+      <p style="font-size:12px">Mengapa data master tidak boleh diubah sembarangan?</p>
+    </div>
+  </div>
+  <div class="slide-number">11 / 14</div>
+</section>
+
+<!-- ============ 12 · TROUBLESHOOTING ============ -->
+<section class="slide" data-title="Troubleshooting" data-note="Bahas error yang sering muncul dan cara memperbaikinya.">
+  <div class="eyebrow">10 · MASALAH UMUM</div>
+  <h2>Kalau Muncul Error, Cek Ini:</h2>
+  
+  <table class="mini-table">
+    <thead><tr><th>Masalah</th><th>Penyebab</th><th>Solusi</th></tr></thead>
+    <tbody>
+      <tr><td><code>#N/A</code> / PERIKSA MASTER</td><td>Nama/kode tidak sama persis.</td><td>Cek spasi atau ejaan. Pastikan ada di master.</td></tr>
+      <tr><td>VLOOKUP kolom salah</td><td>Nomor kolom hasil keliru.</td><td>Ingat urutan: A=1, B=2, C=3, D=4, E=5.</td></tr>
+      <tr><td>VLOOKUP tidak nemu</td><td>Kolom kode bukan paling kiri.</td><td>Gunakan rentang A:E karena kode di kolom A.</td></tr>
+      <tr><td>Rumus ditolak</td><td>Pemisah argumen beda.</td><td>Coba ganti titik koma (;) dengan koma (,).</td></tr>
+      <tr><td>Status salah</td><td>Urutan IFS tidak tepat.</td><td>Cek dari atas ke bawah. TIDAK DITEMUKAN harus di awal.</td></tr>
+    </tbody>
+  </table>
+  <div class="slide-number">12 / 14</div>
+</section>
+
+<!-- ============ 13 · PENUTUP ============ -->
+<section class="slide cover" data-title="Penutup &amp; Sesi 5" data-note="Sampaikan naskah penutup. Beri bocoran materi Sesi 5 (FILTER dan Dynamic Arrays).">
+  <div class="eyebrow">SESI 04 · PENUTUP</div>
+  <h1>Terima<br><span class="accent">Kasih</span></h1>
+  <p class="lead">Hari ini kita sudah belajar mengambil data dari Master Item menggunakan XLOOKUP dan VLOOKUP. Hasilnya bukan hanya menghemat pengetikan, tetapi juga menjaga agar data mengikuti satu sumber referensi yang sama.</p>
+  
+  <div style="margin-top:20px; position:relative; z-index:1; margin-bottom:24px;">
+    <a href="https://docs.google.com/spreadsheets/d/1-1LCLErs6dEzt85mFYwetUdU5JggKgwH/edit?usp=sharing&ouid=113453549576979377139&rtpof=true&sd=true" target="_blank" class="btn-link" style="background:var(--caramel); color:var(--coffee) !important;">
+      📂 Buka Kembali Workbook Sesi 4
+    </a>
+  </div>
+
+  <div class="cover-meta" style="margin-top:0">
+    <span class="pill">Next: FILTER &amp; Dynamic Arrays</span>
+    <span class="pill">Latihan Mandiri</span>
+  </div>
+  <div class="cover-footer">Post Management Data · Learn it, structure it, automate it</div>
+  <div class="slide-number">13 / 14</div>
+</section>
+
+</div>
+</main>
+
+<footer class="controls">
+  <div class="progress-wrap"><span class="counter" id="counter">01 / 14</span><div class="progress-track" aria-label="Kemajuan presentasi"><div class="progress-fill" id="progressFill"></div></div></div>
+  <div class="keyboard-hint">Navigasi: ← → / Space</div>
+  <div class="navs"><button class="nav-btn" id="prevBtn" type="button" aria-label="Slide sebelumnya" disabled>←</button><button class="nav-btn" id="nextBtn" type="button" aria-label="Slide selanjutnya">→</button></div>
+</footer>
+
+<!-- Modal Catatan Tutor -->
+<div class="note-pop" id="notePop" role="dialog" aria-modal="true" aria-labelledby="noteTitle">
+  <div class="note-card">
+    <div class="note-head"><h3 id="noteTitle">Catatan tutor</h3><button class="quiet-btn" id="closeNotes" style="color:var(--coffee);border-color:var(--line)" type="button">Tutup ✕</button></div>
+    <p id="noteText"></p>
+  </div>
+</div>
+
+<!-- Modal Daftar Materi -->
+<div class="note-pop" id="outlinePop" role="dialog" aria-modal="true" aria-labelledby="outlineTitle">
+  <div class="note-card">
+    <div class="note-head"><h3 id="outlineTitle">Daftar materi</h3><button class="quiet-btn" id="closeOutline" style="color:var(--coffee);border-color:var(--line)" type="button">Tutup ✕</button></div>
+    <div id="outlineList"></div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const counter = document.getElementById('counter');
+  const progressFill = document.getElementById('progressFill');
+  const notesBtn = document.getElementById('notesBtn');
+  const notePop = document.getElementById('notePop');
+  const noteText = document.getElementById('noteText');
+  const noteTitle = document.getElementById('noteTitle');
+  const outlinePop = document.getElementById('outlinePop');
+  const outlineList = document.getElementById('outlineList');
+  let current = 0;
+
+  const pad = (number) => String(number).padStart(2, '0');
+  function showSlide(index) {
+    current = Math.max(0, Math.min(slides.length - 1, index));
+    slides.forEach((slide, i) => {
+      slide.classList.toggle('active', i === current);
+      slide.classList.toggle('exit-left', i < current);
+      slide.setAttribute('aria-hidden', i === current ? 'false' : 'true');
+    });
+    counter.textContent = `${pad(current + 1)} / ${pad(slides.length)}`;
+    progressFill.style.width = `${((current + 1) / slides.length) * 100}%`;
+    prevBtn.disabled = current === 0;
+    nextBtn.disabled = current === slides.length - 1;
+    document.title = `${pad(current + 1)} — ${slides[current].dataset.title} | Sesi 4`;
+    if (notePop.classList.contains('open')) updateNote();
+  }
+  function updateNote() {
+    noteTitle.textContent = `Catatan tutor · ${slides[current].dataset.title}`;
+    noteText.textContent = slides[current].dataset.note || 'Tidak ada catatan.';
+  }
+  function openNotes() { updateNote(); notePop.classList.add('open'); document.getElementById('closeNotes').focus(); }
+  function closeNotes() { notePop.classList.remove('open'); notesBtn.focus(); }
+  function openOutline() { outlinePop.classList.add('open'); document.getElementById('closeOutline').focus(); }
+  function closeOutline() { outlinePop.classList.remove('open'); document.getElementById('outlineBtn').focus(); }
+
+  prevBtn.addEventListener('click', () => showSlide(current - 1));
+  nextBtn.addEventListener('click', () => showSlide(current + 1));
+  notesBtn.addEventListener('click', openNotes);
+  document.getElementById('closeNotes').addEventListener('click', closeNotes);
+  document.getElementById('outlineBtn').addEventListener('click', openOutline);
+  document.getElementById('closeOutline').addEventListener('click', closeOutline);
+  document.getElementById('fullscreenBtn').addEventListener('click', async () => {
+    const target = document.getElementById('presentation');
+    try {
+      if (!document.fullscreenElement) await target.requestFullscreen();
+      else await document.exitFullscreen();
+    } catch (error) { alert('Mode layar penuh tidak didukung pada browser ini.'); }
+  });
+  [notePop, outlinePop].forEach(pop => pop.addEventListener('click', event => { if (event.target === pop) pop.classList.remove('open'); }));
+  document.addEventListener('keydown', event => {
+    if (notePop.classList.contains('open') || outlinePop.classList.contains('open')) {
+      if (event.key === 'Escape') { notePop.classList.remove('open'); outlinePop.classList.remove('open'); }
+      return;
+    }
+    if (['ArrowRight', 'PageDown', ' '].includes(event.key)) { event.preventDefault(); showSlide(current + 1); }
+    if (['ArrowLeft', 'PageUp'].includes(event.key)) { event.preventDefault(); showSlide(current - 1); }
+    if (event.key === 'Home') showSlide(0);
+    if (event.key === 'End') showSlide(slides.length - 1);
+  });
+  slides.forEach((slide, index) => {
+    const li = document.createElement('button');
+    li.type = 'button';
+    li.textContent = `${pad(index + 1)}  ${slide.dataset.title}`;
+    li.style.cssText = 'display:block;width:100%;text-align:left;padding:11px 12px;margin:5px 0;border:1px solid #e7d9c9;border-radius:8px;background:#fffdf9;color:#493126;cursor:pointer;font-size:12px';
+    li.addEventListener('click', () => { showSlide(index); closeOutline(); });
+    outlineList.appendChild(li);
+  });
+  showSlide(0);
+})();
+</script>
+</body>
+</html>
